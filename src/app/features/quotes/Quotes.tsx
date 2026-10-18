@@ -4,7 +4,9 @@ import { addQuote, resetQuote } from "./quotesSlices";
 import { useState } from "react";
 
 export default function Quotes() {
+  // Used to read values from redux store state.
   const quote = useSelector((state) => state.quote);
+  // Used to send (actions) to the redux store to trigger state updates.
   const dispatch = useDispatch();
   const [newQuote, setNewQuote] = useState([]);
 
