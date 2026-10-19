@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { addQuote, resetQuote } from "./quotesSlices";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export default function Quotes() {
   // Used to read values from redux store state.
@@ -9,10 +9,20 @@ export default function Quotes() {
   // Used to send (actions) to the redux store to trigger state updates.
   const dispatch = useDispatch();
   const [newQuote, setNewQuote] = useState([]);
+  // Used to use the reference of any HTML element without re-rendering the component.
+  const userInputRef = useRef<HTMLInputElement>(null);
 
   const reset = () => {
     dispatch(resetQuote());
+    setNewQuote([]);
+    userInputRef.current?.focus();
   };
+
+  function handleUserInput() {
+    setNewQuote([]);
+    dispatch(addQuote(newQuote));
+    userInputRef.current?.focus();
+  }
 
   return (
     <div>
@@ -24,11 +34,12 @@ export default function Quotes() {
         <h1>No quote found...</h1>
       )}
       <input
+        ref={userInputRef}
         type="text"
         value={newQuote}
         onChange={(e) => setNewQuote(e.target.value)}
       />
-      <button onClick={() => dispatch(addQuote(newQuote))}>Add Quote</button>
+      <button onClick={handleUserInput}>Add Quote</button>
       <button onClick={reset}>Reset Quote</button>
     </div>
   );
